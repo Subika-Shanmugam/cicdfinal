@@ -3,17 +3,29 @@ name: Deploy To-Do List App
 on:
   push:
     branches:
-      - main  # Runs workflow when code is pushed to the main branch
+      - main  # Runs the workflow when code is pushed to the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build the Project
+        run: npm run build
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages  # Deploy to gh-pages branch
-          folder: .  # Deploy everything from root folder
+          branch: gh-pages  # Deploys to this branch
+          folder: build  # Change this if needed (for React or other frameworks)
